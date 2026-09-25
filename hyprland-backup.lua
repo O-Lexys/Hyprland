@@ -16,17 +16,6 @@ hl.monitor({
     cm       = "hdredid",
 })
 
-hl.monitor({
-    output   = "HEADLESS-1",
-    mode     = "1280x720@60",
-    position = "640x1080",
-    scale    = 1,
-    bitdepth = 8,
-    transform = 0,
-    cm       = "hdredid",
-})
-
-
 hl.config({
     xwayland = {
         force_zero_scaling = true,
@@ -40,7 +29,8 @@ hl.config({
 local terminal    = "kitty"
 local fileManager = "kitty yazi"
 local mainMod     = "SUPER"
-local ipc = "noctalia msg "
+local ipc         = "dms ipc call"
+
 -------------------
 ---- АВТОЗАПУСК ----
 -------------------
@@ -49,10 +39,10 @@ hl.on("hyprland.start", function()
     hl.env("NIXOS_OZONE_WL", "1")
     hl.exec_cmd("qpwgraph")
     hl.exec_cmd("dbus-update-activation-environment --systemd --all")
-    hl.exec_cmd("noctalia")
+    hl.exec_cmd("dms run")
     hl.exec_cmd("bash -c 'until dbus-send --session --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.ListNames 2>/dev/null | grep -q StatusNotifierWatcher; do sleep 0.5; done && pw-jack carla /home/lioha/rootcustom/carla/noise.carxp'")
-    --hl.exec_cmd("hyprctl output create headless")
-    --hl.exec_cmd("hyprctl plugin load /run/current-system/sw/lib/libhyprgrass.so")
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-theme 'Ju-Fufu'")
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-size 24")
 --    hl.exec_cmd("hyprctl plugin load /run/current-system/sw/lib/libhypr-dynamic-cursors.so        ")
 end)
 
@@ -71,93 +61,109 @@ hl.env("WLR_DRM_NO_MODIFIERS", "1")
 ---- ЗОВНІШНІЙ ВИГЛЯД ----
 -----------------------
 
+-- hl.config({
+--     general = {
+--         gaps_in          = 5,
+--         gaps_out         = 10,
+--         border_size      = 2,
+--         col = {
+--             active_border   = { colors = { "rgba(255,255,255,0.6)", "rgba(180,180,255,0.4)" }, angle = 45 },
+--             inactive_border = "rgba(5a5a5a80)",
+--         },
+--         resize_on_border = false,
+--         allow_tearing    = false,
+--         layout           = "scrolling",
+--     },
+--
+--     decoration = {
+--         rounding       = 10,
+--         rounding_power = 10,
+--         active_opacity   = 1.0,
+--         inactive_opacity = 1.0,
+--
+--         shadow = {
+--             enabled      = false,
+--             range        = 4,
+--             render_power = 3,
+--             color        = 0xee1a1a1a,
+--         },
+--
+--         blur = {
+--             enabled  = true,
+--             size     = 1,
+--             passes   = 3,
+--             vibrancy = 0.1696,
+--         },
+--     },
+--
+--     animations = {
+--         enabled = true,
+--     },
+-- })
+
 
 
 hl.config({
-     decoration = {
-        rounding = 12,
-        rounding_power = 3,
+        decoration = {
+        rounding = 8,           
         active_opacity = 1.0,
         inactive_opacity = 0.95,
         dim_inactive = true,
         dim_strength = 0.1,
-        glow = {
-            enabled = false,
-        },
         blur = {
             enabled = true,
-            vibrancy = 0,
-            brightness = 0.9,
-            contrast = 1,
-            vibrancy_darkness = 1,
-            size = 2,
-            passes = 2,
+            size = 8,
+            passes = 3,
             new_optimizations = true,
-            ignore_opacity = false,
+            ignore_opacity = true,  
             xray = false,
-            variant = "kawase",
-            heat_shimmer = {
-                speed = 0.5,
-            },
-            glass = {
-                refraction = 20,
-                size = 40,
-            },
-            acrylic = {
-                refraction = 48,
-                bulb = 40,
-                clarity = 1,
-                tint = 0x00000000,
-                aberration = 0,
-            },
-            haze = {
-                intensity = 0.1,
-                iridescence = 0.3,
-            },
-            ripple = {
-                duration = 1,
-                strength = 32,
-                radius = 600,
-                width = 100,
-            },
-            drops = {
-                speed = 3,
-            }
-        },
-        motion_blur ={
-            enabled = false,
-            samples = 14,
-        },
-        wobble ={
-            enabled = false,
-            mesh = 2,
-            stiffness = 200,
-            intensity = 0.2,
-            mass = 1,
         },
         shadow = {
-            enabled = false,
-            color = "rgba(1a1a2eff)",
-            color_inactive = "rgba(cba6f7aa)",
+            enabled = true,
             range = 20,
-},
+            render_power = 3,
+            color = "rgba(00000055)",
+            offset = { 2, 4 },
+        },
     },
     general = {
-        snap ={
-            enabled = true,
-        },
         gaps_in = 4,
         gaps_out = 8,
         border_size = 1,
-        layout = "scrolling",
+        layout = "scrolling"
         },
     })
-hl.config({ master = {
-}})
-hl.config({ scrolling = {column_width = 0.5,} })
+
+-------------------
+---- АНІМАЦІЇ -----
+-------------------
+
+-- hl.curve("easeOutQuint",   { type = "bezier", points = { {0.23, 1},    {0.32, 1}    } })
+-- hl.curve("easeInOutCubic", { type = "bezier", points = { {0.65, 0.05}, {0.36, 1}    } })
+-- hl.curve("linear",         { type = "bezier", points = { {0,    0},    {1,    1}    } })
+-- hl.curve("almostLinear",   { type = "bezier", points = { {0.5,  0.5},  {0.75, 1.0}  } })
+-- hl.curve("quick",          { type = "bezier", points = { {0.15, 0},    {0.1,  1}    } })
+-- hl.curve("overshoot",      { type = "bezier", points = { {0.05, 0.9},  {0.1,  1.1}  } })
+-- hl.curve("myBezier",       { type = "bezier", points = { {0.05, 0.9},  {0.1,  1.05} } })
+--
+-- hl.animation({ leaf = "global",        enabled = true,  speed = 10,   bezier = "default"       })
+-- hl.animation({ leaf = "border",        enabled = true,  speed = 6,    bezier = "myBezier"      })
+-- hl.animation({ leaf = "windows",       enabled = true,  speed = 6,    bezier = "myBezier",     style = "popin"      })
+-- hl.animation({ leaf = "windowsIn",     enabled = true,  speed = 4.1,  bezier = "easeOutQuint", style = "popin 87%"  })
+-- hl.animation({ leaf = "windowsOut",    enabled = true,  speed = 6,    bezier = "myBezier",     style = "slide"      })
+-- hl.animation({ leaf = "fadeIn",        enabled = true,  speed = 1.73, bezier = "almostLinear"  })
+-- hl.animation({ leaf = "fadeOut",       enabled = true,  speed = 1.46, bezier = "almostLinear"  })
+-- hl.animation({ leaf = "fade",          enabled = true,  speed = 6,    bezier = "myBezier"      })
+-- hl.animation({ leaf = "layers",        enabled = true,  speed = 3.81, bezier = "easeOutQuint"  })
+-- hl.animation({ leaf = "layersIn",      enabled = true,  speed = 4,    bezier = "easeOutQuint", style = "fade"       })
+-- hl.animation({ leaf = "layersOut",     enabled = true,  speed = 1.5,  bezier = "linear",       style = "fade"       })
+-- hl.animation({ leaf = "fadeLayersIn",  enabled = true,  speed = 1.79, bezier = "almostLinear"  })
+-- hl.animation({ leaf = "fadeLayersOut", enabled = true,  speed = 1.39, bezier = "almostLinear"  })
+-- hl.animation({ leaf = "workspaces",    enabled = true,  speed = 4, bezier = "overshoot",    style = "slidevert"      })
+-- hl.animation({ leaf = "workspacesIn",  enabled = true,  speed = 4, bezier = "overshoot",    style = "slidevert"      })
+-- hl.animation({ leaf = "workspacesOut", enabled = true,  speed = 4, bezier = "overshoot",    style = "slidevert"      })
 
 -- Криві
-
 hl.curve("win11", {
     type   = "bezier",
     points = { {0.23, 1}, {0.32, 1} }
@@ -192,6 +198,12 @@ hl.animation({ leaf = "specialWorkspace", enabled = true,  speed = 3,   bezier =
 
 
 
+hl.window_rule({
+    name            = "kitty-scrolling-width",
+    match           = { class = "kitty" },
+})
+
+
 local MAX_ZOOM = 6
 local MIN_ZOOM = 1
 local ZOOM_TOGGLE_FACTOR = 1.5
@@ -217,7 +229,7 @@ end
 
 hl.config({
     misc = {
-       -- force_default_wallpaper = -1,
+        force_default_wallpaper = -1,
         disable_hyprland_logo   = false,
     },
 })
@@ -247,51 +259,50 @@ hl.config({
 ---------------------
 
 -- Основні дії
-hl.bind("SUPER + mouse_down", function()      zoom(-4)     end, { global = true }, { description = "Zoom -"})
-hl.bind("SUPER + mouse_up", function()    zoom(2)    end, { global = true }, { description = "Zoom +" })
-hl.bind(mainMod .. " + Q",      hl.dsp.exec_cmd("kitty"), { description = "Terminal" })
-hl.bind(mainMod .. " + A",      hl.dsp.exec_cmd("dolphin"), { description = "Dolphin" })
-hl.bind(mainMod .. " + R",      hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"), { description = "Launcher" })
-hl.bind(mainMod .. " + W",      hl.dsp.exec_cmd(ipc .. "panel-toggle wallpaper"), { description = "Wallpaper" })
-hl.bind(mainMod .. " + T",      hl.dsp.exec_cmd(ipc .. "panel-toggle control-center"), { description = "Control-center" })
-hl.bind(mainMod .. " + comma",  hl.dsp.exec_cmd(ipc .. "settings-toggle"), { description = "Noctalia Settings" })
-hl.bind(mainMod .. " + L",      hl.dsp.exec_cmd(ipc .. "session lock"), { description = "Lock Screen" })
-hl.bind("ALT + TAB",            hl.dsp.exec_cmd(ipc .. "bar-toggle"), {description = "Toggle Bar"})
-hl.bind(mainMod .. " + B",      hl.dsp.exec_cmd(ipc .. "power-cycle"), { description = "Power Profile Cycle" })
-hl.bind(mainMod .. " + C",      hl.dsp.window.close(), { description = "Close Window" })
-hl.bind(mainMod .. " + M",      hl.dsp.exit(), { description = "Exit Sesion" })
-hl.bind(mainMod .. " + E",      hl.dsp.exec_cmd(fileManager), { description = "FileManager" })
-hl.bind(mainMod .. " + V",      hl.dsp.window.float({ action = "toggle" }), { description = "Float" })
-hl.bind(mainMod .. " + D",      hl.dsp.exec_cmd("~/rootcustom/scripts/screenshot_area.sh"), { description = "Screenshot" })
-hl.bind(mainMod .. " + P",      hl.dsp.exec_cmd("~/.local/bin/msi-fan"), { description = "Fan-controll" })
-hl.bind("ALT + 2",       hl.dsp.exec_cmd("killall paplay"), {description = "Stop paplay"})
-hl.bind("ALT + 3",       hl.dsp.exec_cmd("~/rootcustom/scripts/desktop.sh"), {description = "Scope-tui"})
-hl.bind("ALT + 4",       hl.dsp.exec_cmd("~/rootcustom/scripts/sound.sh"), {description = "Soundpad"})
-hl.bind("ALT + 1",       hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"), {description = "Mic Mute"})
+hl.bind("SUPER + mouse_up", function()      zoom(-4)     end, { global = true })
+hl.bind("SUPER + mouse_down", function()    zoom(2)    end, { global = true })
+hl.bind(mainMod .. " + Q",      hl.dsp.exec_cmd("kitty"))
+hl.bind(mainMod .. " + A",      hl.dsp.exec_cmd("dolphin"))
+hl.bind(mainMod .. " + C",      hl.dsp.window.close())
+hl.bind(mainMod .. " + M",      hl.dsp.exit())
+hl.bind(mainMod .. " + E",      hl.dsp.exec_cmd(fileManager))
+hl.bind(mainMod .. " + V",      hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + D",      hl.dsp.exec_cmd("~/rootcustom/scripts/screenshot_area.sh"))
+hl.bind(mainMod .. " + B",      hl.dsp.exec_cmd("~/.local/bin/msi-fan"))
+
+hl.bind("SUPER + SPACE", hl.dsp.exec_cmd("/home/lioha/rootcustom/scripts/language.sh"))
+hl.bind("ALT + 2",       hl.dsp.exec_cmd("killall paplay"))
+hl.bind("ALT + 3",       hl.dsp.exec_cmd("~/rootcustom/scripts/desktop.sh"))
+hl.bind("ALT + 4",       hl.dsp.exec_cmd("~/rootcustom/scripts/sound.sh"))
+hl.bind("ALT + 1",       hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"))
+hl.bind("ALT + 6",       hl.dsp.exec_cmd(""))
+hl.bind(mainMod .. " + X",      hl.dsp.exec_cmd("~/rootcustom/wg0.sh"))
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("/home/lioha/rootcustom/scripts/mut.sh"), { locked = true })
 
 -- GIF оверлей
-hl.bind("ALT + 8", hl.dsp.exec_cmd("mpv --loop --ontop --no-border --no-audio --no-input-default-bindings /home/lioha/Downloads/1.mp4"))
-hl.bind("ALT + 7", hl.dsp.exec_cmd("mpv --loop --ontop --no-border --no-audio --no-input-default-bindings /home/lioha/Downloads/1.gif"))
+hl.bind("ALT + 8", hl.dsp.exec_cmd("mpv --loop --ontop --no-border --no-input-default-bindings /home/lioha/Downloads/1.gif"))
 hl.bind("ALT + 5", hl.dsp.exec_cmd("killall mpv"))
 
 -- Фокус вікон стрілками
-hl.bind(mainMod .. " + left",      hl.dsp.focus({ direction = "left"  }), {description = "Window focus Left"})
-hl.bind(mainMod .. " + right",     hl.dsp.focus({ direction = "right" }), {description = "Window focus Right"})
-hl.bind(mainMod .. " + up",        hl.dsp.focus({ direction = "up"    }), {description = "Window focus Up"})
-hl.bind(mainMod .. " + down",      hl.dsp.focus({ direction = "down"  }), {description = "Window focus Down"})
+hl.bind(mainMod .. " + left",   hl.dsp.focus({ direction = "left"  }))
+hl.bind(mainMod .. " + right",  hl.dsp.focus({ direction = "right" }))
+hl.bind(mainMod .. " + up",     hl.dsp.focus({ direction = "up"    }))
+hl.bind(mainMod .. " + down",   hl.dsp.focus({ direction = "down"  }))
 hl.bind(mainMod .. " + mouse:277", hl.dsp.focus({ direction = "left"  }))
 hl.bind(mainMod .. " + mouse:276", hl.dsp.focus({ direction = "right" }))
+-- Scrolling layout: рух по колонках
+hl.bind(mainMod .. " + period", hl.dsp.layout("move +col"))
+hl.bind(mainMod .. " + comma",  hl.dsp.layout("move -col"))
 
 ------------------------------------------
 ---- КЕРУВАННЯ БЕЗ МИШКИ: СВАП/РЕСАЙЗ ----
 ------------------------------------------
 
 -- Свап (переміщення) вікна в тайлінгу стрілками
-hl.bind(mainMod .. " + SHIFT + left",  hl.dsp.window.move({ direction = "left"  }), {description = "Move window Left"})
-hl.bind(mainMod .. " + SHIFT + right", hl.dsp.window.move({ direction = "right" }), {description = "Move window Right"})
-hl.bind(mainMod .. " + SHIFT + up",    hl.dsp.window.move({ direction = "up"    }), {description = "Move window Up"})
-hl.bind(mainMod .. " + SHIFT + down",  hl.dsp.window.move({ direction = "down"  }), {description = "Move window Down"})
+hl.bind(mainMod .. " + SHIFT + left",  hl.dsp.window.move({ direction = "left"  }))
+hl.bind(mainMod .. " + SHIFT + right", hl.dsp.window.move({ direction = "right" }))
+hl.bind(mainMod .. " + SHIFT + up",    hl.dsp.window.move({ direction = "up"    }))
+hl.bind(mainMod .. " + SHIFT + down",  hl.dsp.window.move({ direction = "down"  }))
 
 -- Рух floating-вікна клавіатурою (крок 30px, ALT + стрілки)
 -- ПРИМІТКА: window.move({x,y,relative=true}) для floating-вікон я вивів за аналогією
@@ -350,21 +361,9 @@ hl.window_rule({
 })
 
 hl.window_rule({
-    name     = "scrcpy",
-    match    = { title = "2201116PG"},
-    float    = true,
-})
-
-hl.window_rule({
     name  = "mpv overlay",
-    match = { title = "1.* .*- mpv"},
+    match = { class = "^mpv$" },
     float = true, pin = true, no_focus = true, move = {5,1080 - 275}, size = {270,270}
-})
-
-hl.window_rule({
-    name  = "stream",
-    match = { title = ".*Concord - .*"},
-    float = true, move = {430,117}, size = {1222,686},
 })
 
 -- Блокуємо maximize-запити від застосунків
@@ -410,9 +409,9 @@ end
 
 hl.layer_rule({
     match = {
-        namespace = "(.*noctalia-notifications.*$)",
+        namespace = ".*noctalia-notifications.*$",
     },
-    no_screen_share = false,
+    no_screen_share = true,
 })
 
 hl.layer_rule({
@@ -421,25 +420,13 @@ hl.layer_rule({
     blur            = true,
     blur_popups     = true,
     ignore_alpha    = 0.001,
-    no_screen_share = false,
+    no_screen_share = true,
 })
--- у ~/.config/hypr/hyprland.lua
-hl.config({ debug = { damage_tracking = false } })
 
 
 ---------------
 ---- ПЛАГІНИ ----
 ---------------
-
-
--- 1. Without description
-hl.bind("SUPER + SHIFT + W", hl.dsp.exec_cmd([[noctalia msg panel-toggle noctalia/wallhaven:browser]]), { description = "open Wallhaven" })
-
--- 1. Without description
-hl.bind("SUPER + SHIFT + Q", hl.dsp.exec_cmd([[noctalia msg panel-toggle h-jangra/keyviz:overlay]]), { description = "key visual" })
-
--- 1. Without description
-
 -- For Noctalia Color templates
 require("noctalia").apply_theme()
 

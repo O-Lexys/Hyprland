@@ -95,7 +95,7 @@ hl.config({
             new_optimizations = true,
             ignore_opacity = false,
             xray = false,
-            variant = "kawase",
+            variant = "ripple",
             heat_shimmer = {
                 speed = 0.5,
             },
@@ -149,7 +149,7 @@ hl.config({
         gaps_in = 4,
         gaps_out = 8,
         border_size = 1,
-        layout = "scrolling",
+        layout = "infinite",
         },
     })
 hl.config({ master = {
@@ -247,8 +247,10 @@ hl.config({
 ---------------------
 
 -- Основні дії
-hl.bind("SUPER + mouse_down", function()      zoom(-4)     end, { global = true }, { description = "Zoom -"})
-hl.bind("SUPER + mouse_up", function()    zoom(2)    end, { global = true }, { description = "Zoom +" })
+hl.bind("ALT + mouse_down", function()      zoom(-4)     end, { global = true }, { description = "Zoom -"})
+hl.bind("ALT + mouse_up", function()    zoom(2)    end, { global = true }, { description = "Zoom +" })
+hl.bind("SUPER + mouse_up",     hl.dsp.layout("cyclenext"), { description = "RollNext" })
+hl.bind("SUPER + mouse_down",   hl.dsp.layout("cycleprev"), { description = "RollPrev" })
 hl.bind(mainMod .. " + Q",      hl.dsp.exec_cmd("kitty"), { description = "Terminal" })
 hl.bind(mainMod .. " + A",      hl.dsp.exec_cmd("dolphin"), { description = "Dolphin" })
 hl.bind(mainMod .. " + R",      hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"), { description = "Launcher" })
